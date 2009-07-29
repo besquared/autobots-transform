@@ -105,6 +105,10 @@ module AutobotsTransform
       @column_indexes[column]
     end
     
+    def <<(row)
+      @data << row
+    end
+    
     def to_s
       as(:text)
     end

@@ -47,7 +47,7 @@ table = Ruport::Data::Table.new(
 )
 
 raw_largo = []
-100.times do
+1000.times do
   raw_largo << [
     (rand * 100).round,
     (rand * 10).round,
@@ -55,9 +55,6 @@ raw_largo = []
     (rand * 1000).round
   ]
 end
-
-
-GC.disable
 
 table = Ruport::Data::Table.new(
   :data => raw_largo,
@@ -92,31 +89,22 @@ table = AutobotsTransform::Table.new(
 )
 
 puts Benchmark.measure {  
-  table.sort_rows_by!(['agent', 'occurred_at'])
+  table.sort(['agent', 'occurred_at'])
 
-  final = Ruport::Data::Table.new(
+  final = AutobotsTransform::Table.new(
     :column_names => ['hour', 'agent', 'balance[coins]']
   )
 
-  by_hour = Ruport::Data::Grouping.new(table, :by => ['hour', 'agent'])
+  by_hour = table.group_by(['hour', 'agent'])
 
   by_hour.each do |hour, hourly|
-    by_hour.subgrouping(hour).each do |agent, agently|
+    hourly.each do |agent, agently|
       record = agently.data.last
     
-      final << {
-        'hour' => hour,
-        'agent' => agent,
-        'balance[coins]' => record.get('balance[coins]')
-      }
+      final << [hour, agent, record[table.index_of('balance[coins]')]]
     end
   end
 }
-
-
-
-GC.enable
-GC.start
 
 # grouping = Ruport::Data::Grouping.new(table, :by => ['hour'])      
 # grouping.summary(
