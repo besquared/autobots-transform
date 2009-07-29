@@ -21,6 +21,10 @@ describe AutobotsTransform::Table do
     pivoted = @table.pivot('hour', :group_by => 'agent') do |rows|
       rows.sum('balance')
     end
-    puts pivoted
+    pivoted.column_names.should == ['agent', '1', '2']
+    pivoted.data.length.should == 3
+    pivoted.data.should == [
+      ['1', 250.0, nil], ['2', 200.0, 150.0], ['3', 200.0, 250.0]
+    ]
   end
 end
