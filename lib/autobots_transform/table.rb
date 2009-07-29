@@ -13,12 +13,7 @@ module AutobotsTransform
         @column_indexes[name] = index
       end
     end
-    
-    def add_column(name)
-      @column_names << name
-      @column_indexes[column_names.length - 1] = name
-    end
-    
+        
     def each(&block)
       data.each(&block)
     end
@@ -32,21 +27,29 @@ module AutobotsTransform
     end
     
     def distinct(column)
-      data.collect{|datum| datum[@column_indexes[column]]}.uniq
+      data.collect{|datum| datum[index_of(column)]}.uniq
     end
     
     def sum(column)
       sum = 0
-      data.each{|datum| sum += datum[@column_indexes[column]].to_f}
+      data.each{|datum| sum += datum[index_of(column)].to_f}
       sum
     end
     
-    def aggregate(column, initial, &block)
+    def aggregate(initial, &block)
       memo = initial
       data.each do |datum|
-        memo = block.call(memo, datum[@column_indexes[column]])
+        memo = block.call(memo, datum)
       end
       memo
+    end
+    
+    def where(&block)
+      filtered = []
+      data.each do |datum|
+        filtered << datum if yield(datum)
+      end
+      self.class.new(:data => filtered, :column_names => column_names)
     end
     
     def pivot(pivot_column, options = {}, &block)
@@ -76,6 +79,10 @@ module AutobotsTransform
     
     def length
       data.length
+    end
+    
+    def index_of(column)
+      @column_indexes[column]
     end
     
     def to_s

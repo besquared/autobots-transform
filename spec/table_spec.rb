@@ -33,9 +33,17 @@ describe AutobotsTransform::Table do
   end
   
   it "should aggregate" do
-    aggregated = @table.aggregate('hour', 0) do |memo, hour|
-      memo += hour.to_i
+    aggregated = @table.aggregate(0) do |memo, row|
+      memo += row[@table.index_of('hour')].to_i
     end
     aggregated.should == 8
+  end
+  
+  it "should filter" do
+    filtered = @table.where do |row|
+      row[@table.index_of('hour')] == '2' and row[@table.index_of('agent')] == '2'
+    end
+    filtered.length.should == 1
+    filtered.data.first.should == ['2', '2', '150']
   end
 end
