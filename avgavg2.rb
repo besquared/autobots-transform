@@ -12,12 +12,12 @@ raw_largo = []
   ]
 end
 
-table = Measurely::Table.new(
+table = AutobotsTransform::Table.new(
   :data => raw_largo,
   :column_names => ['hour', 'agent', 'balance[coins]', 'occurred_at']
 )
 
 puts Benchmark.measure {
-  grouped = Measurely::Grouping.new(table, :by => ['hour', 'agent'])
+  grouped = AutobotsTransform::Grouping.new(table, :by => ['hour', 'agent'])
   puts grouped.to_s#groups(1).to_s
 }
