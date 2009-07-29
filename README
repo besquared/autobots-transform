@@ -1,0 +1,6 @@
+This is like kind of like the data part of ruport except not slow as balls
+
+It doesn't do all the cool shit like have crazy formatters yet, but hey you know, someone will get around to it. My text formatter makes baby jesus cry.
+
+Read the specs they have some examples of things you can do, one of the nifty things not listed in the specs is nested grouping which is definitely possible and works kind of like a n-dimensional array which I think is sort of cool, not bad for a tuesday night.
+

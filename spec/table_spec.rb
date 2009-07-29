@@ -17,6 +17,10 @@ describe AutobotsTransform::Table do
     )
   end
   
+  it "should group" do
+    
+  end
+  
   it "should get distinct values" do
     @table.distinct('hour').sort.should == ['1', '2']
   end
