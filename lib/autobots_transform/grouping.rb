@@ -1,4 +1,4 @@
-module Measurely
+module AutobotsTransform
   class Grouping
     attr_accessor :table
     attr_accessor :groups

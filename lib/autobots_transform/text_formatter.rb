@@ -1,4 +1,4 @@
-module Measurely
+module AutobotsTransform
   class TextFormatter
     attr_accessor :table
     

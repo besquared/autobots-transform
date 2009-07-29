@@ -1,4 +1,4 @@
-module Measurely
+module AutobotsTransform
   class Table
     attr_accessor :data
     attr_accessor :column_names
@@ -45,7 +45,7 @@ module Measurely
     def as(format = :text)
       case format
       when :text
-        Measurely::TextFormatter.new(self).to_s
+        AutobotsTransform::TextFormatter.new(self).to_s
       end
     end
   end

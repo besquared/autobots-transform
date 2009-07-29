@@ -1,4 +1,4 @@
-module Measurely
+module AutobotsTransform
   class Group < Table
     attr_accessor :name
     
