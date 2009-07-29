@@ -56,7 +56,7 @@ module AutobotsTransform
       
       pivot_values = distinct(pivot_column)
       group_by_values = distinct(options[:group_by])
-            
+      
       group_by_values.each do |group_by_value|
         row = [group_by_value]
         group_group = grouped.groups[group_by_value]
@@ -72,6 +72,10 @@ module AutobotsTransform
       end
       
       self.class.new(:data => pivoted_data, :column_names => [options[:group_by], *pivot_values])
+    end
+    
+    def length
+      data.length
     end
     
     def to_s

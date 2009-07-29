@@ -6,7 +6,7 @@ module AutobotsTransform
     def initialize(table, options = {})
       @table = table
       @groups = {}
-      group_by(options[:by])
+      group_by([options[:by]].flatten)
     end
     
     #
@@ -31,6 +31,34 @@ module AutobotsTransform
           @groups[name] = group.group_by(columns.dup)
         end
       end
+    end
+    
+    def summarize(options = {})
+      rows = []
+      column_names = []
+      if options[:order]
+        rows = []
+        groups.each do |value, group|
+          row = []
+          options[:order].each do |column|
+            row << options[column].call(value, group)
+          end
+          rows << row
+        end
+        column_names = options[:order]
+      else
+        rows = []
+        groups.each do |value, group|
+          row = []
+          options.each do |column, summary|
+            row << summary.call(value, group)
+          end
+          rows << row
+        end
+        column_names = options.keys
+      end
+      
+      Table.new(:data => rows, :column_names => column_names)
     end
     
     def each(&block)
