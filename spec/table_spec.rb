@@ -17,8 +17,17 @@ describe AutobotsTransform::Table do
     )
   end
   
-  it "should group" do
-    
+  it "should sort" do
+    @table.sort(['balance', 'agent'], :order => :descending)
+    @table.data.first[@table.index_of('balance')].should == '250'
+  end
+  
+  it "should sort_by" do
+    @table.sort_by(:order => :ascending) do |row|
+      (row[@table.index_of('agent')] + row[@table.index_of('balance')]).to_i
+    end
+    @table.data.first[@table.index_of('agent')].should == '1'
+    @table.data.first[@table.index_of('balance')].should == '100'
   end
   
   it "should get distinct values" do

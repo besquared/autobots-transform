@@ -18,8 +18,28 @@ module AutobotsTransform
       data.each(&block)
     end
     
-    def sort_by(&block)
-      data.sort_by(&block)
+    def sort(columns, options = {})
+      sorted = data.sort_by do |row|
+        columns.collect{|column| row[index_of(column)]}
+      end
+      
+      if options[:order].nil? or options[:order] == :ascending
+        @data = sorted
+      else
+        @data = sorted.reverse
+      end
+    end
+    
+    def sort_by(options = {}, &block)
+      sorted = data.sort_by do |row|
+        yield(row)
+      end
+      
+      if options[:order].nil? or options[:order] == :ascending
+        @data = sorted
+      else
+        @data = sorted.reverse
+      end
     end
     
     def group_by(columns)

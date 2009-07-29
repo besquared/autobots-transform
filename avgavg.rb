@@ -30,6 +30,7 @@ require 'rubygems'
 require 'ruport'
 require 'ruby-debug'
 require 'benchmark'
+require 'lib/autobots_transform'
 
 raw = [
   ['1', '1', '100', '1'],
@@ -45,51 +46,80 @@ table = Ruport::Data::Table.new(
   :column_names => ['hour', 'agent', 'balance[coins]', 'occurred_at']
 )
 
-puts table
-puts table.pivot('hour', :group_by => 'agent', :values => 'balance[coins]')
+raw_largo = []
+100.times do
+  raw_largo << [
+    (rand * 100).round,
+    (rand * 10).round,
+    (rand * 1000).round,
+    (rand * 1000).round
+  ]
+end
 
-# raw_largo = []
-# 100.times do
-#   raw_largo << [
-#     (rand * 100).round,
-#     (rand * 10).round,
-#     (rand * 1000).round,
-#     (rand * 1000).round
-#   ]
-# end
-# 
-# 
-# puts table
-# 
-# # GC.disable
-# 
-# puts Benchmark.measure {  
-#   table.sort_rows_by!(['agent', 'occurred_at'])
-# 
-#   final = Ruport::Data::Table.new(
-#     :column_names => ['hour', 'agent', 'balance[coins]']
-#   )
-# 
-#   by_hour = Ruport::Data::Grouping.new(table, :by => ['hour', 'agent'])
-# 
-#   by_hour.each do |hour, hourly|
-#     by_hour.subgrouping(hour).each do |agent, agently|
-#       record = agently.data.last
-#     
-#       final << {
-#         'hour' => hour,
-#         'agent' => agent,
-#         'balance[coins]' => record.get('balance[coins]')
-#       }
-#     end
-#   end
-# }
-# 
-# # GC.enable
-# # GC.start
-# 
-# # grouping = Ruport::Data::Grouping.new(table, :by => ['hour'])      
-# # grouping.summary(
-# #   'hour', 'revenue' => lambda{|g| g.sigma('revenue')},
-# #   :order => ['hour', 'revenue']
-# # )
+
+GC.disable
+
+table = Ruport::Data::Table.new(
+  :data => raw_largo,
+  :column_names => ['hour', 'agent', 'balance[coins]', 'occurred_at']
+)
+
+puts Benchmark.measure {  
+  table.sort_rows_by!(['agent', 'occurred_at'])
+
+  final = Ruport::Data::Table.new(
+    :column_names => ['hour', 'agent', 'balance[coins]']
+  )
+
+  by_hour = Ruport::Data::Grouping.new(table, :by => ['hour', 'agent'])
+
+  by_hour.each do |hour, hourly|
+    by_hour.subgrouping(hour).each do |agent, agently|
+      record = agently.data.last
+    
+      final << {
+        'hour' => hour,
+        'agent' => agent,
+        'balance[coins]' => record.get('balance[coins]')
+      }
+    end
+  end
+}
+
+table = AutobotsTransform::Table.new(
+  :data => raw_largo,
+  :column_names => ['hour', 'agent', 'balance[coins]', 'occurred_at']
+)
+
+puts Benchmark.measure {  
+  table.sort_rows_by!(['agent', 'occurred_at'])
+
+  final = Ruport::Data::Table.new(
+    :column_names => ['hour', 'agent', 'balance[coins]']
+  )
+
+  by_hour = Ruport::Data::Grouping.new(table, :by => ['hour', 'agent'])
+
+  by_hour.each do |hour, hourly|
+    by_hour.subgrouping(hour).each do |agent, agently|
+      record = agently.data.last
+    
+      final << {
+        'hour' => hour,
+        'agent' => agent,
+        'balance[coins]' => record.get('balance[coins]')
+      }
+    end
+  end
+}
+
+
+
+GC.enable
+GC.start
+
+# grouping = Ruport::Data::Grouping.new(table, :by => ['hour'])      
+# grouping.summary(
+#   'hour', 'revenue' => lambda{|g| g.sigma('revenue')},
+#   :order => ['hour', 'revenue']
+# )
