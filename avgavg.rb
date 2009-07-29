@@ -56,12 +56,12 @@ raw_largo = []
   ]
 end
 
-table = Ruport::Data::Table.new(
-  :data => raw_largo,
-  :column_names => ['hour', 'agent', 'balance[coins]', 'occurred_at']
-)
-
-puts Benchmark.measure {  
+puts Benchmark.measure {
+  table = Ruport::Data::Table.new(
+    :data => raw_largo,
+    :column_names => ['hour', 'agent', 'balance[coins]', 'occurred_at']
+  )
+  
   table.sort_rows_by!(['agent', 'occurred_at'])
 
   final = Ruport::Data::Table.new(
@@ -83,12 +83,12 @@ puts Benchmark.measure {
   end
 }
 
-table = AutobotsTransform::Table.new(
-  :data => raw_largo,
-  :column_names => ['hour', 'agent', 'balance[coins]', 'occurred_at']
-)
-
 puts Benchmark.measure {  
+  table = AutobotsTransform::Table.new(
+    :data => raw_largo,
+    :column_names => ['hour', 'agent', 'balance[coins]', 'occurred_at']
+  )
+
   table.sort(['agent', 'occurred_at'])
 
   final = AutobotsTransform::Table.new(
