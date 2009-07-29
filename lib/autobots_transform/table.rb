@@ -117,6 +117,8 @@ module AutobotsTransform
       case format
       when :text
         AutobotsTransform::TextFormatter.new(self).to_s
+      when :csv
+        AutobotsTransform::CsvFormatter.new(self).to_csv
       end
     end
   end
