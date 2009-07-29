@@ -32,60 +32,64 @@ require 'ruby-debug'
 require 'benchmark'
 
 raw = [
-  {'hour' => '1', 'agent' => '1', 'balance[coins]' => '100', 'occurred_at' => '1'},
-  {'hour' => '1', 'agent' => '2', 'balance[coins]' => '250', 'occurred_at' => '1'},
-  {'hour' => '1', 'agent' => '1', 'balance[coins]' => '50', 'occurred_at' => '2'},
-  {'hour' => '1', 'agent' => '3', 'balance[coins]' => '350', 'occurred_at' => '2'},
-  {'hour' => '2', 'agent' => '2', 'balance[coins]' => '200', 'occurred_at' => '3'},
-  {'hour' => '2', 'agent' => '3', 'balance[coins]' => '400', 'occurred_at' => '3'}
+  ['1', '1', '100', '1'],
+  ['1', '2', '250', '1'],
+  ['1', '1', '50', '2'],
+  ['1', '3', '350', '2'],
+  ['2', '2', '200', '3'],
+  ['2', '3', '400', '3']
 ]
 
-raw_largo = []
-100.times do
-  raw_largo << [
-    (rand * 100).round,
-    (rand * 10).round,
-    (rand * 1000).round,
-    (rand * 1000).round
-  ]
-end
-
 table = Ruport::Data::Table.new(
-  :data => raw_largo,
+  :data => raw,
   :column_names => ['hour', 'agent', 'balance[coins]', 'occurred_at']
 )
 
 puts table
+puts table.pivot('hour', :group_by => 'agent', :values => 'balance[coins]')
 
-# GC.disable
-
-puts Benchmark.measure {  
-  table.sort_rows_by!(['agent', 'occurred_at'])
-
-  final = Ruport::Data::Table.new(
-    :column_names => ['hour', 'agent', 'balance[coins]']
-  )
-
-  by_hour = Ruport::Data::Grouping.new(table, :by => ['hour', 'agent'])
-
-  by_hour.each do |hour, hourly|
-    by_hour.subgrouping(hour).each do |agent, agently|
-      record = agently.data.last
-    
-      final << {
-        'hour' => hour,
-        'agent' => agent,
-        'balance[coins]' => record.get('balance[coins]')
-      }
-    end
-  end
-}
-
-# GC.enable
-# GC.start
-
-# grouping = Ruport::Data::Grouping.new(table, :by => ['hour'])      
-# grouping.summary(
-#   'hour', 'revenue' => lambda{|g| g.sigma('revenue')},
-#   :order => ['hour', 'revenue']
-# )
+# raw_largo = []
+# 100.times do
+#   raw_largo << [
+#     (rand * 100).round,
+#     (rand * 10).round,
+#     (rand * 1000).round,
+#     (rand * 1000).round
+#   ]
+# end
+# 
+# 
+# puts table
+# 
+# # GC.disable
+# 
+# puts Benchmark.measure {  
+#   table.sort_rows_by!(['agent', 'occurred_at'])
+# 
+#   final = Ruport::Data::Table.new(
+#     :column_names => ['hour', 'agent', 'balance[coins]']
+#   )
+# 
+#   by_hour = Ruport::Data::Grouping.new(table, :by => ['hour', 'agent'])
+# 
+#   by_hour.each do |hour, hourly|
+#     by_hour.subgrouping(hour).each do |agent, agently|
+#       record = agently.data.last
+#     
+#       final << {
+#         'hour' => hour,
+#         'agent' => agent,
+#         'balance[coins]' => record.get('balance[coins]')
+#       }
+#     end
+#   end
+# }
+# 
+# # GC.enable
+# # GC.start
+# 
+# # grouping = Ruport::Data::Grouping.new(table, :by => ['hour'])      
+# # grouping.summary(
+# #   'hour', 'revenue' => lambda{|g| g.sigma('revenue')},
+# #   :order => ['hour', 'revenue']
+# # )

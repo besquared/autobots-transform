@@ -31,11 +31,40 @@ module AutobotsTransform
       Grouping.new(self, :by => columns)
     end
     
-    def pivot(pivot_column, options = {})
+    def distinct(column)
+      data.collect{|datum| datum[@column_indexes[column]]}
+    end
+    
+    def sum(column)
+      sum = 0
+      data.each{|datum| sum += datum[@column_indexes[column]].to_f}
+      sum
+    end
+    
+    def pivot(pivot_column, options = {}, &block)
       pivoted_data = []
-      pivoted_columns = []
       
+      grouped = group_by([pivot_column, options[:group_by]])
       
+      pivot_values = distinct(pivot_column)
+      group_by_values = distinct(options[:group_by])
+      
+      group_by_values.each do |group_by_value|
+        row = [group_by_value]
+        group_group = grouped.groups[group_by_value]
+        next if group_group.nil?
+        pivot_values.each do |pivot_value|
+          pivot_group = group_group.groups[pivot_value]
+          if pivot_group.nil?
+            row << nil
+          else
+            row << block.call(pivot_group) if block_given?
+          end
+        end
+        pivoted_data << row
+      end
+      
+      self.class.new(:data => pivoted_data, :column_names => [options[:group_by], *pivot_values])
     end
     
     def to_s
