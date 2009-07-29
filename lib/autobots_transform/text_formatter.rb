@@ -8,9 +8,9 @@ module AutobotsTransform
     
     def to_s
       stringy = ""
-      stringy += table.column_names.join('|') + "\n"
+      stringy += @table.column_names.join('|') + "\n"
       stringy += "-" * stringy.length + "\n"
-      table.data.each do |datum|
+      @table.data.each do |datum|
         stringy += datum.join('|') + "\n"
       end
       stringy

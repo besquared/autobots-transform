@@ -119,6 +119,10 @@ module AutobotsTransform
         AutobotsTransform::TextFormatter.new(self).to_s
       when :csv
         AutobotsTransform::CsvFormatter.new(self).to_csv
+      when :xml
+        AutobotsTransform::XmlFormatter.new(self).to_xml
+      when :json
+        AutobotsTransform::JsonFormatter.new(self).to_json
       end
     end
   end

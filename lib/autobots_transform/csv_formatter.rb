@@ -8,9 +8,9 @@ module AutobotsTransform
     
     def to_csv
       FasterCSV.generate do |csv|
-        csv << table.column_names.join(',')
+        csv << table.column_names
         table.data.each do |datum|
-          csv << datum.join(',') + "\n"
+          csv << datum
         end
       end
     end
