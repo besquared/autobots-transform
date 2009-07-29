@@ -17,7 +17,11 @@ describe AutobotsTransform::Table do
     )
   end
   
-  it "should pivot properly" do
+  it "should get distinct values" do
+    @table.distinct('hour').sort.should == ['1', '2']
+  end
+  
+  it "should pivot" do
     pivoted = @table.pivot('hour', :group_by => 'agent') do |rows|
       rows.sum('balance')
     end
@@ -26,5 +30,12 @@ describe AutobotsTransform::Table do
     pivoted.data.should == [
       ['1', 250.0, nil], ['2', 200.0, 150.0], ['3', 200.0, 250.0]
     ]
+  end
+  
+  it "should aggregate" do
+    aggregated = @table.aggregate('hour', 0) do |memo, hour|
+      memo += hour.to_i
+    end
+    aggregated.should == 8
   end
 end

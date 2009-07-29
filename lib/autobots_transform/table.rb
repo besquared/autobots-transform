@@ -41,6 +41,14 @@ module AutobotsTransform
       sum
     end
     
+    def aggregate(column, initial, &block)
+      memo = initial
+      data.each do |datum|
+        memo = block.call(memo, datum[@column_indexes[column]])
+      end
+      memo
+    end
+    
     def pivot(pivot_column, options = {}, &block)
       pivoted_data = []
       
