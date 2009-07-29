@@ -3,10 +3,10 @@ require 'benchmark'
 require 'lib/autobots_transform'
 
 raw_largo = []
-10.times do
+100000.times do
   raw_largo << [
-    (rand * 2).round,
-    (rand * 2).round,
+    (rand * 100).round,
+    (rand * 100).round,
     (rand * 1000).round,
     (rand * 1000).round
   ]
@@ -18,6 +18,10 @@ table = AutobotsTransform::Table.new(
 )
 
 puts Benchmark.measure {
-  grouped = AutobotsTransform::Grouping.new(table, :by => ['hour', 'agent'])
-  puts grouped.to_s#groups(1).to_s
+  table.pivot('hour', :group_by => 'agent') do |group|
+    group.sum('balance[coins]')
+  end
+  
+  # grouped = AutobotsTransform::Grouping.new(table, :by => ['hour', 'agent'])
+  # puts grouped.to_s#groups(1).to_s
 }

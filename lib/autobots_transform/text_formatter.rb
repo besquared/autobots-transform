@@ -7,7 +7,13 @@ module AutobotsTransform
     end
     
     def to_s
-      table.data.inspect
+      stringy = ""
+      stringy += table.column_names.join('|') + "\n"
+      stringy += "-" * stringy.length + "\n"
+      table.data.each do |datum|
+        stringy += datum.join('|') + "\n"
+      end
+      stringy
     end
   end
 end

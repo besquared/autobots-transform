@@ -18,8 +18,9 @@ describe AutobotsTransform::Table do
   end
   
   it "should pivot properly" do
-    puts @table.pivot('hour', :group_by => 'agent') do |rows|
+    pivoted = @table.pivot('hour', :group_by => 'agent') do |rows|
       rows.sum('balance')
     end
+    puts pivoted
   end
 end

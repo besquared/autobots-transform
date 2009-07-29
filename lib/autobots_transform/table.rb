@@ -32,7 +32,7 @@ module AutobotsTransform
     end
     
     def distinct(column)
-      data.collect{|datum| datum[@column_indexes[column]]}
+      data.collect{|datum| datum[@column_indexes[column]]}.uniq
     end
     
     def sum(column)
@@ -44,15 +44,14 @@ module AutobotsTransform
     def pivot(pivot_column, options = {}, &block)
       pivoted_data = []
       
-      grouped = group_by([pivot_column, options[:group_by]])
+      grouped = group_by([options[:group_by], pivot_column])
       
       pivot_values = distinct(pivot_column)
       group_by_values = distinct(options[:group_by])
-      
+            
       group_by_values.each do |group_by_value|
         row = [group_by_value]
         group_group = grouped.groups[group_by_value]
-        next if group_group.nil?
         pivot_values.each do |pivot_value|
           pivot_group = group_group.groups[pivot_value]
           if pivot_group.nil?
