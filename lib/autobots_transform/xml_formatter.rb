@@ -6,7 +6,7 @@ module AutobotsTransform
       @table = table
     end
     
-    def to_xml
+    def to_xml(&block)
       column_names = @table.column_names
       Nokogiri::XML::Builder.new do |xml|
         xml.root do

@@ -6,12 +6,14 @@ module AutobotsTransform
       @table = table
     end
     
-    def to_s
-      stringy = ""
-      stringy += @table.column_names.join('|') + "\n"
-      stringy += "-" * stringy.length + "\n"
+    def to_s(&block)
+      stringy = @table.column_names.join('|') + "\n"
+      stringy << "-" * stringy.length + "\n"
       @table.data.each do |datum|
-        stringy += datum.join('|') + "\n"
+        row = datum
+        row = yield(datum) if block_given?
+        raise Exception, "Block must return an array of the same size as the input row" if row.nil? || row.size != datum.size
+        stringy << row.join('|') + "\n"
       end
       stringy
     end

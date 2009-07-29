@@ -6,7 +6,7 @@ module AutobotsTransform
       @table = table
     end
     
-    def to_csv
+    def to_csv(&block)
       FasterCSV.generate do |csv|
         csv << table.column_names
         table.data.each do |datum|

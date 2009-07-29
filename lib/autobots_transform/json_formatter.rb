@@ -6,7 +6,7 @@ module AutobotsTransform
       @table = table
     end
     
-    def to_json
+    def to_json(&block)
       encoder = Yajl::Encoder.new(:pretty => true)
       column_names = @table.column_names
       table_hash = {}

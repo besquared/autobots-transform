@@ -109,20 +109,20 @@ module AutobotsTransform
       @data << row
     end
     
-    def to_s
-      as(:text)
+    def to_s(&block)
+      as(:text, &block)
     end
     
-    def as(format = :text)
+    def as(format = :text, &block)
       case format
       when :text
-        AutobotsTransform::TextFormatter.new(self).to_s
+        AutobotsTransform::TextFormatter.new(self).to_s(&block)
       when :csv
-        AutobotsTransform::CsvFormatter.new(self).to_csv
+        AutobotsTransform::CsvFormatter.new(self).to_csv(&block)
       when :xml
-        AutobotsTransform::XmlFormatter.new(self).to_xml
+        AutobotsTransform::XmlFormatter.new(self).to_xml(&block)
       when :json
-        AutobotsTransform::JsonFormatter.new(self).to_json
+        AutobotsTransform::JsonFormatter.new(self).to_json(&block)
       end
     end
   end
