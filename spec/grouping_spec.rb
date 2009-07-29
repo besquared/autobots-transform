@@ -33,4 +33,10 @@ describe AutobotsTransform::Grouping do
     summarized.data.first.should == [150.0, 1.0]
     summarized.data.last.should == [250.0, 3.0]
   end
+  
+  it "should overload []" do
+    hour1 = @grouping['1']
+    hour1.length.should == 1
+    hour1.data.first.should == ['1', '1', '150']
+  end
 end

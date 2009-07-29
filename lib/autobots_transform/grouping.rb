@@ -72,5 +72,9 @@ module AutobotsTransform
       end
       stringed
     end
+    
+    def [](key)
+      groups[key]
+    end
   end
 end
