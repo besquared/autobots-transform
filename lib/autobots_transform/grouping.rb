@@ -23,7 +23,7 @@ module AutobotsTransform
       end
       
       grouped.each do |name, rows|
-        @groups[name] = Group.new(name, :column_names => table.column_names, :data => rows)
+        @groups[name] = Group.new(name, :column_names => table.column_names.dup, :data => rows)
       end
       
       if columns.length > 0
@@ -59,6 +59,16 @@ module AutobotsTransform
       end
       
       Table.new(:data => rows, :column_names => column_names)
+    end
+    
+    def collect(&block)
+      collected = Table.new(:column_names => table.column_names.dup)
+            
+      @groups.each do |key, group|
+        collected += yield(key, group)
+      end
+      
+      collected
     end
     
     def each(&block)

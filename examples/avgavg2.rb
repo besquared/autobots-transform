@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'benchmark'
-require 'lib/autobots_transform'
+
+require File.join(File.dirname(__FILE__), '..', 'lib', 'autobots_transform')
 
 raw_largo = []
 100000.times do

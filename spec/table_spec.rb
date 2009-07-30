@@ -59,4 +59,10 @@ describe AutobotsTransform::Table do
     filtered.length.should == 1
     filtered.data.first.should == ['2', '2', '150']
   end
+  
+  it "should find top" do
+    top_balance = @table.top(1, 'balance', :order => :descending)
+    top_balance.length.should == 1
+    top_balance.data.first.should == ['2', '3', '250']
+  end
 end

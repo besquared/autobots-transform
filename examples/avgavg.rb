@@ -30,7 +30,8 @@ require 'rubygems'
 require 'ruport'
 require 'ruby-debug'
 require 'benchmark'
-require 'lib/autobots_transform'
+
+require File.join(File.dirname(__FILE__), '..', 'lib', 'autobots_transform')
 
 raw = [
   ['1', '1', '100', '1'],

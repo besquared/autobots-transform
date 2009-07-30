@@ -72,6 +72,22 @@ module AutobotsTransform
       self.class.new(:data => filtered, :column_names => column_names)
     end
     
+    def top(count, columns, options = {})
+      top_table = Table.new(:data => data.dup, :column_names => column_names.dup)
+      top_table.sort(columns, options)
+      top_table.data = top_table.data[0, count] if top_table.data.length > count
+      top_table
+    end
+    
+    def append(column, &block)
+      @column_names << column
+      @column_indexes[column] = @column_names.length -1
+      
+      data.each do |datum|
+        yield(datum)
+      end
+    end
+    
     def pivot(pivot_column, options = {}, &block)
       pivoted_data = []
       
@@ -107,6 +123,11 @@ module AutobotsTransform
     
     def <<(row)
       @data << row
+    end
+    
+    def +(table)
+      @data += table.data
+      self
     end
     
     def to_s(&block)
