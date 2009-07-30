@@ -26,7 +26,7 @@ describe AutobotsTransform::Grouping do
   it "should summarize" do
     summarized = @grouping.summarize(
       'hour' => lambda{|hour, group| group.sum('balance')}, 
-      'agent' => lambda{|agent, group| group.sum('agent')}
+      'agent' => lambda{|hour, group| group.sum('agent')}
     )
 
     summarized.length.should == 2
