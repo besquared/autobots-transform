@@ -144,6 +144,8 @@ module AutobotsTransform
         AutobotsTransform::XmlFormatter.new(self).to_xml(&block)
       when :json
         AutobotsTransform::JsonFormatter.new(self).to_json(&block)
+      when :yaml
+        AutobotsTransform::YamlFormatter.new(self).to_yaml(&block)
       end
     end
   end
