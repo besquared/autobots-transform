@@ -65,4 +65,9 @@ describe AutobotsTransform::Table do
     top_balance.length.should == 1
     top_balance.data.first.should == ['2', '3', '250']
   end
+  
+  it "should transform" do
+    @table.transform('balance'){|row| row[@table.index_of('balance')].to_f * 1000}
+    @table.data.first.last.should == 150000.0
+  end
 end

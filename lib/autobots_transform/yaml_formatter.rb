@@ -1,12 +1,6 @@
 module AutobotsTransform
-  class YamlFormatter
-    attr_accessor :table
-    
-    def initialize(table)
-      @table = table
-    end
-    
-    def to_yaml(&block)
+  class YamlFormatter < Formatter    
+    def format
       column_names = @table.column_names
       table_hash = {}
       table_hash[:rows] = []

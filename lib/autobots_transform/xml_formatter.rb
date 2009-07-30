@@ -1,12 +1,6 @@
 module AutobotsTransform
-  class XmlFormatter
-    attr_accessor :table
-    
-    def initialize(table)
-      @table = table
-    end
-    
-    def to_xml(&block)
+  class XmlFormatter < Formatter
+    def format
       column_names = @table.column_names
       Nokogiri::XML::Builder.new do |xml|
         xml.root do

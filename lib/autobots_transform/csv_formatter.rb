@@ -1,12 +1,6 @@
 module AutobotsTransform
   class CsvFormatter
-    attr_accessor :table
-    
-    def initialize(table)
-      @table = table
-    end
-    
-    def to_csv(&block)
+    def format
       if RUBY_VERSION.include?('1.9')
         klass = CSV
       else

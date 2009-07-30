@@ -1,12 +1,6 @@
 module AutobotsTransform
-  class JsonFormatter
-    attr_accessor :table
-    
-    def initialize(table)
-      @table = table
-    end
-    
-    def to_json(&block)
+  class JsonFormatter < Formatter    
+    def format
       encoder = Yajl::Encoder.new(:pretty => true)
       column_names = @table.column_names
       table_hash = {}

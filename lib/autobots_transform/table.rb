@@ -88,6 +88,12 @@ module AutobotsTransform
       end
     end
     
+    def transform(column, &block)
+      data.each do |datum|
+        datum[index_of(column)] = yield(datum)
+      end
+    end
+    
     def pivot(pivot_column, options = {}, &block)
       pivoted_data = []
       
@@ -134,18 +140,18 @@ module AutobotsTransform
       as(:text, &block)
     end
     
-    def as(format = :text, &block)
+    def as(format = :text, options = {}, &block)
       case format
       when :text
-        AutobotsTransform::TextFormatter.new(self).to_s(&block)
+        AutobotsTransform::TextFormatter.new(self, options).format
       when :csv
-        AutobotsTransform::CsvFormatter.new(self).to_csv(&block)
+        AutobotsTransform::CsvFormatter.new(self, options).format
       when :xml
-        AutobotsTransform::XmlFormatter.new(self).to_xml(&block)
+        AutobotsTransform::XmlFormatter.new(self, options).format
       when :json
-        AutobotsTransform::JsonFormatter.new(self).to_json(&block)
+        AutobotsTransform::JsonFormatter.new(self, options).format
       when :yaml
-        AutobotsTransform::YamlFormatter.new(self).to_yaml(&block)
+        AutobotsTransform::YamlFormatter.new(self, options).format
       end
     end
   end

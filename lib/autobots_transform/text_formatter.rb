@@ -1,12 +1,6 @@
 module AutobotsTransform
-  class TextFormatter
-    attr_accessor :table
-    
-    def initialize(table)
-      @table = table
-    end
-    
-    def to_s(&block)
+  class TextFormatter < Formatter    
+    def format
       lengths = []
       
       @table.column_names.each_with_index do |column, index|
@@ -24,7 +18,7 @@ module AutobotsTransform
       total_length += @table.column_names.length * 3 - 1
 
       output = ""
-      
+            
       output << "+" + ("-" * total_length) + "+\n"
       
       @table.column_names.each_with_index do |column, index|
@@ -36,10 +30,6 @@ module AutobotsTransform
       output << "+" + ("-" * total_length) + "+\n"
       
       @table.data.each do |datum|        
-        row = datum
-        row = yield(datum) if block_given?
-        raise Exception, "Block must return an array of the same size as the input row" if row.nil? || row.size != datum.size
-        
         datum.each_with_index do |atom, index|
           output << "| " + format_s(atom, lengths[index]) + " "
         end
