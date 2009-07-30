@@ -79,6 +79,9 @@ module AutobotsTransform
       top_table
     end
     
+    #
+    # Finish this and shit
+    #
     def append(column, &block)
       @column_names << column
       @column_indexes[column] = @column_names.length -1
@@ -90,7 +93,7 @@ module AutobotsTransform
     
     def transform(column, &block)
       data.each do |datum|
-        datum[index_of(column)] = yield(datum)
+        datum[index_of(column)] = yield(datum[index_of(column)], datum)
       end
     end
     
@@ -152,6 +155,8 @@ module AutobotsTransform
         AutobotsTransform::JsonFormatter.new(self, options).format
       when :yaml
         AutobotsTransform::YamlFormatter.new(self, options).format
+      when :gvapi
+        AutobotsTransform::GvapiFormatter.new(self, options).format
       end
     end
   end

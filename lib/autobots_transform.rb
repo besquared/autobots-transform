@@ -7,6 +7,7 @@ require File.join(File.dirname(__FILE__), 'autobots_transform', 'csv_formatter')
 require File.join(File.dirname(__FILE__), 'autobots_transform', 'xml_formatter')
 require File.join(File.dirname(__FILE__), 'autobots_transform', 'json_formatter')
 require File.join(File.dirname(__FILE__), 'autobots_transform', 'yaml_formatter')
+require File.join(File.dirname(__FILE__), 'autobots_transform', 'gvapi_formatter')
 
 require 'yaml' unless defined?(YAML)
 if RUBY_VERSION.include?('1.9')

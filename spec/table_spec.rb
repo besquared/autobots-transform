@@ -67,7 +67,7 @@ describe AutobotsTransform::Table do
   end
   
   it "should transform" do
-    @table.transform('balance'){|row| row[@table.index_of('balance')].to_f * 1000}
+    @table.transform('balance'){|balance, row| balance.to_f * 1000}
     @table.data.first.last.should == 150000.0
   end
 end
