@@ -10,16 +10,25 @@ module AutobotsTransform
     
     def run
       self.class.stages.each do |stage|
-        send("build_#{stage}".to_sym)
+        send("#{stage}".to_sym)
+      end
+      self.class.sections.each do |section|
+        send("build_#{section}".to_sym)
       end
     end
     
     class << self
       attr_accessor :stages
+      attr_accessor :sections
       
       def stage(name)
         @stages ||= []
         @stages << name
+      end
+      
+      def section(name)
+        @sections ||= []
+        @sections << name
       end
       
       def run(options)
