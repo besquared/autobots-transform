@@ -28,6 +28,8 @@ module AutobotsTransform
       else
         @data = sorted.reverse
       end
+      
+      self
     end
     
     def sort_by(options = {}, &block)
@@ -40,10 +42,20 @@ module AutobotsTransform
       else
         @data = sorted.reverse
       end
+      
+      self
     end
     
     def group_by(columns)
       Grouping.new(self, :by => columns)
+    end
+    
+    def where(&block)
+      filtered = []
+      data.each do |datum|
+        filtered << datum if yield(datum)
+      end
+      self.class.new(:data => filtered, :column_names => column_names)
     end
     
     def distinct(column)
@@ -64,14 +76,6 @@ module AutobotsTransform
       memo
     end
     
-    def where(&block)
-      filtered = []
-      data.each do |datum|
-        filtered << datum if yield(datum)
-      end
-      self.class.new(:data => filtered, :column_names => column_names)
-    end
-    
     def top(count, columns, options = {})
       top_table = Table.new(:data => data.dup, :column_names => column_names.dup)
       top_table.sort(columns, options)
@@ -79,22 +83,23 @@ module AutobotsTransform
       top_table
     end
     
-    #
-    # Finish this and shit
-    #
     def append(column, &block)
       @column_names << column
-      @column_indexes[column] = @column_names.length -1
+      @column_indexes[column] = @column_names.length - 1
       
       data.each do |datum|
-        yield(datum)
+        datum << yield(datum)
       end
+      
+      self
     end
     
     def transform(column, &block)
       data.each do |datum|
         datum[index_of(column)] = yield(datum[index_of(column)], datum)
       end
+      
+      self
     end
     
     def pivot(pivot_column, options = {}, &block)

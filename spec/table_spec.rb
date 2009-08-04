@@ -70,4 +70,9 @@ describe AutobotsTransform::Table do
     @table.transform('balance'){|balance, row| balance.to_f * 1000}
     @table.data.first.last.should == 150000.0
   end
+  
+  it "should append" do
+    @table.append('adjusted_balance'){|row| @table.get(row, 'balance').to_f * 1000}
+    @table.data.first.last.should == 150000.0
+  end
 end
