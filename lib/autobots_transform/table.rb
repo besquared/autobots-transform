@@ -15,7 +15,10 @@ module AutobotsTransform
     end
         
     def each(&block)
-      data.each(&block)
+      row = Row.new(self)
+      data.each do |datum|
+        block.call(row.set(datum))
+      end
     end
     
     def sort(columns, options = {})

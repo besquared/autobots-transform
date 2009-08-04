@@ -8,7 +8,7 @@ module AutobotsTransform
     def initialize(options = {})
       @options = options
       @options[:conditions] ||= {}
-      @sections = []
+      @sections = {}
       @stack = []
     end
     
