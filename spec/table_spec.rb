@@ -24,10 +24,10 @@ describe AutobotsTransform::Table do
   
   it "should sort_by" do
     @table.sort_by(:order => :ascending) do |row|
-      (row[@table.index_of('agent')] + row[@table.index_of('balance')]).to_i
+      (row['agent'] + row['balance']).to_i
     end
-    @table.data.first[@table.index_of('agent')].should == '1'
-    @table.data.first[@table.index_of('balance')].should == '100'
+    @table[0]['agent'].should == '1'
+    @table[0]['balance'].should == '100'
   end
   
   it "should get distinct values" do
@@ -54,10 +54,10 @@ describe AutobotsTransform::Table do
   
   it "should filter" do
     filtered = @table.where do |row|
-      row[@table.index_of('hour')] == '2' and row[@table.index_of('agent')] == '2'
+      row['hour'] == '2' and row['agent'] == '2'
     end
     filtered.length.should == 1
-    filtered.data.first.should == ['2', '2', '150']
+    filtered[0].data.should == ['2', '2', '150']
   end
   
   it "should find top" do
@@ -72,7 +72,7 @@ describe AutobotsTransform::Table do
   end
   
   it "should append" do
-    @table.append('adjusted_balance'){|row| @table.get(row, 'balance').to_f * 1000}
+    @table.append('adjusted_balance'){|row| row['balance'].to_f * 1000}
     @table.data.first.last.should == 150000.0
   end
 end

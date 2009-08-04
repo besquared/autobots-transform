@@ -22,6 +22,10 @@ module AutobotsTransform
       self
     end
     
+    def [](section)
+      @sections[section]
+    end
+    
     class << self
       attr_accessor :stages
       attr_accessor :sections

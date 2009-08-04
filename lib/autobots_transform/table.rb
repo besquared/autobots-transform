@@ -33,8 +33,9 @@ module AutobotsTransform
     end
     
     def sort_by(options = {}, &block)
-      sorted = data.sort_by do |row|
-        yield(row)
+      row = Row.new(self)
+      sorted = data.sort_by do |datum|
+        yield(row.set(datum))
       end
       
       if options[:order].nil? or options[:order] == :ascending
@@ -52,8 +53,10 @@ module AutobotsTransform
     
     def where(&block)
       filtered = []
+      row = Row.new(self)
       data.each do |datum|
-        filtered << datum if yield(datum)
+        row = row.set(datum)
+        filtered << datum if yield(row)
       end
       self.class.new(:data => filtered, :column_names => column_names)
     end
@@ -87,16 +90,19 @@ module AutobotsTransform
       @column_names << column
       @column_indexes[column] = @column_names.length - 1
       
+      row = Row.new(self)
       data.each do |datum|
-        datum << yield(datum)
+        datum << yield(row.set(datum))
       end
       
       self
     end
     
     def transform(column, &block)
+      row = Row.new(self)
       data.each do |datum|
-        datum[index_of(column)] = yield(datum[index_of(column)], datum)
+        row = row.set(datum)
+        row[column] = yield(row[column], row)
       end
       
       self
@@ -131,6 +137,10 @@ module AutobotsTransform
       row[index_of(column)]
     end
     
+    def set(row, column, value)
+      row[index_of(column)] = value
+    end
+    
     def length
       data.length
     end
@@ -146,6 +156,14 @@ module AutobotsTransform
     def +(table)
       @data += table.data
       self
+    end
+    
+    def [](index)
+      Row.new(self, data[index])
+    end
+    
+    def []=(index, row)
+      data[index] = row
     end
     
     def to_s(&block)
