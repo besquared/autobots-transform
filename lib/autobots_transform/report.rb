@@ -3,9 +3,12 @@ module AutobotsTransform
     attr_accessor :options
     attr_accessor :sections
     
+    attr_accessor :stack
+    
     def initialize(options = {})
       @options = options
       @sections = []
+      @stack = []
     end
     
     def run
@@ -15,6 +18,7 @@ module AutobotsTransform
       self.class.sections.each do |section|
         send("build_#{section}".to_sym)
       end
+      self
     end
     
     class << self

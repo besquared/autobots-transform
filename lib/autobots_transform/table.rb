@@ -122,6 +122,10 @@ module AutobotsTransform
       self.class.new(:data => pivoted_data, :column_names => [options[:group_by], *pivot_values])
     end
     
+    def get(row, column)
+      row[index_of(column)]
+    end
+    
     def length
       data.length
     end
