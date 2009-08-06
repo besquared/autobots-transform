@@ -3,13 +3,13 @@ module AutobotsTransform
     attr_accessor :options
     attr_accessor :sections
     
-    attr_accessor :stack
+    attr_accessor :memory
     
     def initialize(options = {})
       @options = options
       @options[:conditions] ||= {}
       @sections = {}
-      @stack = []
+      @memory = {}
     end
     
     def run
