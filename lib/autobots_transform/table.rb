@@ -136,12 +136,32 @@ module AutobotsTransform
       self.class.new(:data => pivoted_data, :column_names => [options[:group_by], *pivot_values])
     end
     
+    def summarize(options = {})
+      row = []
+      column_names = []
+      if options[:order]
+        options[:order].each do |column|
+          row << options[column].call(self)
+        end
+        column_names = options[:order]
+      else
+        options.each do |column, summary|
+          row << summary.call(self)
+        end
+        column_names = options.keys
+      end
+      
+      Table.new(:data => row, :column_names => column_names)
+    end
+    
     def get(row, column)
-      row[index_of(column)]
+      index = index_of(column)
+      index.nil? ? nil : row[index]
     end
     
     def set(row, column, value)
-      row[index_of(column)] = value
+      index = index_of(column)
+      row[index_of(column)] = value unless index.nil?
     end
     
     def length

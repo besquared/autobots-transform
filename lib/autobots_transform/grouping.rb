@@ -16,10 +16,10 @@ module AutobotsTransform
       grouped = {}
       
       column = columns.shift
-      table.data.each do |datum|
-        key = datum[table.column_indexes[column]]
+      table.each do |row|
+        key = row[column]
         grouped[key] ||= []
-        grouped[key] << datum
+        grouped[key] << row.data
       end
       
       grouped.each do |name, rows|
