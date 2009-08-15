@@ -10,6 +10,8 @@ module AutobotsTransform
       @table.data.each do |datum|
         datum.each_with_index do |atom, index|
           length = atom.to_s.length
+          puts "length => #{length}"
+          puts "length[index] => #{lengths[index]}"
           lengths[index] = length if length > lengths[index]
         end
       end

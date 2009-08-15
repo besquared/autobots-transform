@@ -151,7 +151,7 @@ module AutobotsTransform
         column_names = options.keys
       end
       
-      Table.new(:data => row, :column_names => column_names)
+      Table.new(:data => [row], :column_names => column_names)
     end
     
     def get(row, column)
