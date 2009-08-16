@@ -13,13 +13,6 @@ module AutobotsTransform
         @column_indexes[name] = index
       end
     end
-        
-    def each(&block)
-      row = Row.new(self)
-      data.each do |datum|
-        block.call(row.set(datum))
-      end
-    end
     
     def sort(columns, options = {})
       sorted = data.sort_by do |row|
@@ -164,6 +157,33 @@ module AutobotsTransform
       row[index_of(column)] = value unless index.nil?
     end
     
+    def each(&block)
+      row = Row.new(self)
+      data.each do |datum|
+        block.call(row.set(datum))
+      end
+    end
+    
+    def first(column = nil)
+      if column
+        if data.length > 0
+          data.first[index_of(column)]
+        end
+      else
+        Row.new(self, data.first)
+      end
+    end
+    
+    def last(column = nil)
+      if column
+        if data.length > 0
+          data.last[index_of(column)]
+        end
+      else
+        Row.new(self, data.last)
+      end
+    end
+
     def length
       data.length
     end

@@ -20,5 +20,9 @@ module AutobotsTransform
       @data = data
       self
     end
+    
+    def method_missing(method_name, *args, &block)
+      data.send(method_name, *args, &block)
+    end
   end
 end
