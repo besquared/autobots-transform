@@ -61,9 +61,9 @@ module AutobotsTransform
       Table.new(:data => rows, :column_names => column_names)
     end
     
-    def collect(&block)
-      collected = Table.new(:column_names => table.column_names.dup)
-            
+    def collect(*column_names, &block)
+      collected = Table.new(:column_names => column_names || table.column_names.dup)
+      
       @groups.each do |key, group|
         collected += yield(key, group)
       end
