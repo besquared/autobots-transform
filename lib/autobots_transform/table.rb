@@ -149,7 +149,7 @@ module AutobotsTransform
     
     def get(row, column)
       index = index_of(column)
-      index.nil? ? nil : row[index]
+      (index.nil? or row.nil?) ? nil : row[index]
     end
     
     def set(row, column, value)
