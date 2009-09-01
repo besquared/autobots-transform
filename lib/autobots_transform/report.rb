@@ -5,6 +5,9 @@ module AutobotsTransform
     
     attr_accessor :memory
     
+    class_inheritable_accessor :stages
+    class_inheritable_accessor :sections
+    
     def initialize(options = {})
       @options = options
       @options[:conditions] ||= {}
@@ -27,17 +30,14 @@ module AutobotsTransform
     end
     
     class << self
-      attr_accessor :stages
-      attr_accessor :sections
-      
       def stage(name)
-        @stages ||= []
-        @stages << name
+        self.stages ||= []
+        self.stages << name
       end
-      
+            
       def section(name)
-        @sections ||= []
-        @sections << name
+        self.sections ||= []
+        self.sections << name
       end
       
       def run(options)
