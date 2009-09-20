@@ -20,7 +20,7 @@ module AutobotsTransform
         send("#{stage}".to_sym)
       end if self.class.stages
       self.class.sections.each do |section|
-        send("build_#{section}".to_sym)
+        @sections[section] = send("build_#{section}".to_sym)
       end if self.class.sections
       self
     end
