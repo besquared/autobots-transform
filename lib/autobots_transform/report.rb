@@ -18,10 +18,10 @@ module AutobotsTransform
     def run
       self.class.stages.each do |stage|
         send("#{stage}".to_sym)
-      end
+      end if self.class.stages
       self.class.sections.each do |section|
         send("build_#{section}".to_sym)
-      end
+      end if self.class.sections
       self
     end
     

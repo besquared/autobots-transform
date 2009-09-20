@@ -12,6 +12,19 @@ module AutobotsTransform
       @column_names.each_with_index do |name, index|
         @column_indexes[name] = index
       end
+      
+      # We can take hashes too
+      if @data.first.is_a?(Hash)
+        rows = []
+        @data.each do |datum|
+          row = []
+          @column_names.each do |name|
+            row << datum[name] 
+          end
+          rows << row
+        end
+        @data = rows
+      end
     end
     
     def sort(columns, options = {})
