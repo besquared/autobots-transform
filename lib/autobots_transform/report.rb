@@ -19,9 +19,15 @@ module AutobotsTransform
       self.class.stages.each do |stage|
         send("#{stage}".to_sym)
       end if self.class.stages
+      
       self.class.sections.each do |section|
-        @sections[section] = send("build_#{section}".to_sym)
+        if (options[:only].blank? and options[:except].blank?) or 
+           (options[:only] and options[:only].include?(section)) or
+           (options[:except] and not options[:except].include?(section))
+          @sections[section] = send("build_#{section}".to_sym)
+        end
       end if self.class.sections
+      
       self
     end
     
