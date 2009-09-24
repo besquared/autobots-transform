@@ -16,7 +16,8 @@ module AutobotsTransform
       
       total_length = lengths.inject(0){|s, n| s += n}
       total_length += @table.column_names.length * 3 - 1
-
+      total_length = 0 if total_length < 0
+      
       output = ""
             
       output << "+" + ("-" * total_length) + "+\n"

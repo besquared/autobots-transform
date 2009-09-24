@@ -65,9 +65,10 @@ module AutobotsTransform
       row = Row.new(self)
       data.each do |datum|
         row = row.set(datum)
-        filtered << datum if yield(row)
+        filtered << datum.dup if yield(row)
       end
-      self.class.new(:data => filtered, :column_names => column_names)
+      
+      Table.new(:data => filtered, :column_names => column_names.dup)
     end
     
     def distinct(column)
@@ -158,6 +159,12 @@ module AutobotsTransform
       end
       
       Table.new(:data => [row], :column_names => column_names)
+    end
+    
+    def concat(table)
+      table.data.each do |row|
+        self << row
+      end
     end
     
     def get(row, column)
