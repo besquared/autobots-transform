@@ -1,6 +1,6 @@
 module AutobotsTransform
   class TextFormatter < Formatter    
-    def format
+    def format      
       lengths = []
       
       @table.column_names.each_with_index do |column, index|
@@ -9,7 +9,9 @@ module AutobotsTransform
       
       @table.data.each do |datum|
         datum.each_with_index do |atom, index|
-          length = atom.to_s.length
+          length = atom.to_s.length || 0
+          puts "length is nil!" if length.nil?
+          puts "lengths[index] is nil! => #{@table.column_names} => #{index}" if lengths[index].nil?
           lengths[index] = length if length > lengths[index]
         end
       end

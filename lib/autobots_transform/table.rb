@@ -222,7 +222,11 @@ module AutobotsTransform
     end
     
     def [](index)
-      Row.new(self, data[index])
+      if index.is_a?(String)
+        Row.new(self, data.find{|row| row[0] == index})
+      else
+        Row.new(self, data[index])
+      end
     end
     
     def []=(index, row)
