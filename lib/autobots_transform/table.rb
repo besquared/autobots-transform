@@ -158,6 +158,9 @@ module AutobotsTransform
         column_names = options.keys
       end
       
+      # Doesn't work with subclassing now, changed because
+      #  sometimes it was group that was the subclass and it
+      #  has a different constructor
       Table.new(:data => [row], :column_names => column_names)
     end
     
