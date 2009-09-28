@@ -33,34 +33,37 @@ module AutobotsTransform
       end
     end
     
-    def summarize(options = {})
+    #
+    # grouping.summarize do |summary|
+    #   summary.column 'total' do |value, group|
+    #     group.sum('field')
+    #   end
+    # end
+    #
+    def summarize(options = {})      
+      summary = Summary.new
+      
+      yield(summary)
+      
       rows = []
       column_names = []
-      if options[:order]
-        rows = []
-        groups.each do |value, group|
-          row = []
-          options[:order].each do |column|
-            row << options[column].call(value, group)
-          end
-          rows << row
+      groups.each do |value, group|
+        row = []
+        summary.columns.each do |column|
+          row << column.last.call(value, group)
         end
-        column_names = options[:order]
-      else
-        rows = []
-        groups.each do |value, group|
-          row = []
-          options.each do |column, summary|
-            row << summary.call(value, group)
-          end
-          rows << row
-        end
-        column_names = options.keys
+        rows << row
       end
+      column_names = summary.columns.collect(&:first)
       
       Table.new(:data => rows, :column_names => column_names)
     end
     
+    #
+    # We should do this by defering table creation
+    #  until after we have yielded everything, then
+    #  just taking the columns from the innermost table
+    #
     def collect(*column_names, &block)
       column_names = table.column_names.dup if column_names.blank?
       collected = Table.new(:column_names => column_names)

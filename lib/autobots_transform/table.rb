@@ -28,6 +28,7 @@ module AutobotsTransform
     end
     
     def sort(columns, options = {})
+      debugger
       sorted = data.sort_by do |row|
         columns.collect{|column| row[index_of(column)]}
       end
@@ -69,6 +70,24 @@ module AutobotsTransform
       end
       
       Table.new(:data => filtered, :column_names => column_names.dup)
+    end
+    
+    def partition(&block)
+      first = []
+      second = []
+      row = Row.new(self)
+      data.each do |datum|
+        row = row.set(datum)
+        
+        if yield(row)
+          first << datum.dup
+        else
+          second << datum.dup
+        end        
+      end
+      
+      return Table.new(:data => first, :column_names => column_names.dup), \
+              Table.new(:data => second, :column_names => column_names.dup)
     end
     
     def distinct(column)
@@ -144,19 +163,18 @@ module AutobotsTransform
     end
     
     def summarize(options = {})
+      summary = Summary.new
+      
+      yield(summary)
+      
       row = []
       column_names = []
-      if options[:order]
-        options[:order].each do |column|
-          row << options[column].call(self)
+      groups.each do |value, group|
+        summary.columns.each do |column|
+          row << column.last.call(self)
         end
-        column_names = options[:order]
-      else
-        options.each do |column, summary|
-          row << summary.call(self)
-        end
-        column_names = options.keys
       end
+      column_names = summary.columns.collect(&:first)
       
       # Doesn't work with subclassing now, changed because
       #  sometimes it was group that was the subclass and it
