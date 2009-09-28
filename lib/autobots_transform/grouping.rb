@@ -12,8 +12,9 @@ module AutobotsTransform
     #
     # Recursive grouping to create nested groups
     #
-    def group_by(columns)
+    def group_by(*columns)
       grouped = {}
+      columns = columns.flatten
       
       column = columns.shift
       table.each do |row|
@@ -35,7 +36,7 @@ module AutobotsTransform
     
     #
     # grouping.summarize do |summary|
-    #   summary.column 'total' do |value, group|
+    #   summary.total do |value, group|
     #     group.sum('field')
     #   end
     # end
@@ -73,7 +74,6 @@ module AutobotsTransform
           collected += yield(key, group)
         end
       end
-      
       collected
     end
     

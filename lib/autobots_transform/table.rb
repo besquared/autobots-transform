@@ -56,7 +56,7 @@ module AutobotsTransform
       self
     end
     
-    def group_by(columns)
+    def group_by(*columns)
       Grouping.new(self, :by => columns)
     end
     
