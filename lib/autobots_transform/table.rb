@@ -169,10 +169,8 @@ module AutobotsTransform
       
       row = []
       column_names = []
-      groups.each do |value, group|
-        summary.columns.each do |column|
-          row << column.last.call(self)
-        end
+      summary.columns.each do |column|
+        row << column.last.call(self)
       end
       column_names = summary.columns.collect(&:first)
       

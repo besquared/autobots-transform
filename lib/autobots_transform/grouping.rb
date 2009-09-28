@@ -65,11 +65,13 @@ module AutobotsTransform
     #  just taking the columns from the innermost table
     #
     def collect(*column_names, &block)
-      column_names = table.column_names.dup if column_names.blank?
-      collected = Table.new(:column_names => column_names)
-      
+      collected = nil
       @groups.each do |key, group|
-        collected += yield(key, group)
+        if collected.nil?
+          collected = yield(key, group)
+        else
+          collected += yield(key, group)
+        end
       end
       
       collected
