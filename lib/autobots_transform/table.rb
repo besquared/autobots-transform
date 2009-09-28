@@ -28,7 +28,6 @@ module AutobotsTransform
     end
     
     def sort(columns, options = {})
-      debugger
       sorted = data.sort_by do |row|
         columns.collect{|column| row[index_of(column)]}
       end
