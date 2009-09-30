@@ -44,7 +44,7 @@ module AutobotsTransform
     def summarize(options = {})      
       summary = Summary.new
       
-      yield(summary)
+      yield(summary) if block_given?
       
       rows = []
       column_names = []
