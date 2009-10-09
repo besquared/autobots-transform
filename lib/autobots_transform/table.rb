@@ -29,7 +29,7 @@ module AutobotsTransform
     
     def sort(columns, options = {})
       sorted = data.sort_by do |row|
-        columns.collect{|column| row[index_of(column)]}
+        columns.collect{|column| row[index_of(column)]}.join(':')
       end
       
       if options[:order].nil? or options[:order] == :ascending
