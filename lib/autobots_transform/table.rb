@@ -202,6 +202,13 @@ module AutobotsTransform
       end
     end
     
+    def each_with_index(&block)
+      row = Row.new(self)
+      data.each_with_index do |datum, index|
+        block.call(row.set(datum), index)
+      end
+    end
+    
     def first(column = nil)
       if column
         if data.length > 0
