@@ -29,7 +29,11 @@ module AutobotsTransform
     
     def sort(columns, options = {})
       sorted = data.sort_by do |row|
-        columns.collect{|column| row[index_of(column)]}.join(':')
+        columns.collect do |column| 
+          value = row[index_of(column)]
+          value = value.to_s.rjust(12, '0') if value.is_a?(Numeric)
+          value
+        end.join(':')
       end
       
       if options[:order].nil? or options[:order] == :ascending
@@ -235,6 +239,16 @@ module AutobotsTransform
     
     def index_of(column)
       @column_indexes[column]
+    end
+    
+    def indexed(column)
+      indexed = {}
+      data.each_with_index do |datum, index|
+        value = datum[index_of(column)]
+        indexed[value] ||= []
+        indexed[value] << index
+      end
+      indexed
     end
     
     def <<(row)

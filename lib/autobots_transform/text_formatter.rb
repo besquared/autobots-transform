@@ -45,9 +45,9 @@ module AutobotsTransform
       output
     end
   
-    def format_s(value, length)    
+    def format_s(value, length)
       value = value.to_s
-      diff = length - value.length      
+      diff = length - value.length
       return value + (" " * diff)
     end
   end  
