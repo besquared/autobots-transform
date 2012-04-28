@@ -9,7 +9,7 @@ module AutobotsTransform
       
       @table.data.each do |datum|
         datum.each_with_index do |atom, index|
-          length = atom.to_s.length || 0
+          length = atom.inspect.length || 0
           puts "length is nil!" if length.nil?
           puts "lengths[index] is nil! => #{@table.column_names} => #{index}" if lengths[index].nil?
           lengths[index] = length if length > lengths[index]
@@ -46,7 +46,12 @@ module AutobotsTransform
     end
   
     def format_s(value, length)
-      value = value.to_s
+      if value.is_a?(Array)
+        value = value.inspect
+      else
+        value = value.to_s
+      end
+
       diff = length - value.length
       return value + (" " * diff)
     end
