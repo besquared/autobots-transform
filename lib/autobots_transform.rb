@@ -1,3 +1,6 @@
+require 'active_support'
+require 'active_support/core_ext/string'
+
 require File.join(File.dirname(__FILE__), 'autobots_transform', 'table')
 require File.join(File.dirname(__FILE__), 'autobots_transform', 'row')
 require File.join(File.dirname(__FILE__), 'autobots_transform', 'grouping')
