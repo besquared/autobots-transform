@@ -1,6 +1,3 @@
-require 'active_support'
-require 'active_support/core_ext/string'
-
 require File.join(File.dirname(__FILE__), 'autobots_transform', 'table')
 require File.join(File.dirname(__FILE__), 'autobots_transform', 'row')
 require File.join(File.dirname(__FILE__), 'autobots_transform', 'grouping')
@@ -23,5 +20,5 @@ require File.join(File.dirname(__FILE__), 'autobots_transform', 'gvapi_formatter
 #   require 'fastercsv' unless defined?(FasterCSV)
 # end
 # I_KNOW_I_AM_USING_AN_OLD_AND_BUGGY_VERSION_OF_LIBXML2 = "for nokogiri on Leopard"
-require 'nokogiri' unless defined?(Nokogiri)
-require 'yajl' unless defined?(Yajl)
+# require 'nokogiri' unless defined?(Nokogiri)
+# require 'yajl' unless defined?(Yajl)
